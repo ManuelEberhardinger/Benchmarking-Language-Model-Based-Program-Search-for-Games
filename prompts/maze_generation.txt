@@ -1,0 +1,25 @@
+Write a Python function to generate mazes called: {function_name}
+
+The function signature should be:
+
+def generate_maze(
+    width: int,
+    height: int,
+    start: Tuple[int, int],
+    end: Tuple[int, int]) -> List[List[int]]:
+    pass
+
+DO NOT include example usage of how to run the code in your generated code.
+
+Hint: use random functions to control some aspects of the maze generation.
+
+Hint: be sure that the start and end points have a value of 0.
+
+The generate_maze function should generate random mazes that are on a specific size grid of width, height.
+0 represents a passage and 1 represents a wall. There must be a path between the specified
+start and end points.
+The start and end points are represented as a tuple of (x, y) coordinates.
+The start and end point cells must have a value of 0. 
+The score is based on the length of the shortest path between the start
+and the end points. The higher the score, the better the maze generation function.
+The maze generation must be efficient for example a 10x10 maze should be generated in less than 0.1 seconds.

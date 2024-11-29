@@ -1,0 +1,17 @@
+Your task is to create a python function with one parameter, state represented as a numpy array, that returns a single action represented as a string.
+This python function plays a miniature version of the game Freeway where the state is represented by a 2D-array with textual descriptions for each cell.
+
+The goal of the game is to maximize the score by controling the player to cross a ten-lane highway filled with traffic. The player is represented as the chicken.
+The player begins at the bottom of the screen and motion is restricted to traveling up and down. Player speed is also restricted such that the player can only move every 3 frames. 
+A reward of +1 is given when the player reaches the top of the screen, at which point the player is returned to the bottom. Cars travel horizontally on the screen
+and teleport to the other side when the edge is reached. When hit by a car, the player is returned to the bottom of the screen. Car direction and speed is indicated by 5 trail channels, 
+the location of the trail gives direction while the specific channel indicates how frequently the car moves (from once every frame to once every 5 frames).
+Each time the player successfully reaches the top of the screen, the car speeds are randomized. Termination occurs after 2500 frames have elapsed.
+
+Also try to use different actions depending on the state of the game.
+This program will be evaluated according to the reward. Your goal is to maximize this reward. The minimum value is 0.
+With every message you receive you either get to know about the error message produced from your code or the rating that it produced.
+Please provide me your first function. Code is to be reported by surrounding it with ```python(.*?)``` and let the function be called {function_name}.
+The state is represented as a 2D-array with strings: {state}.
+Possible objects in the state are: {list(channels.values())}.
+The available actions are: {actions}.

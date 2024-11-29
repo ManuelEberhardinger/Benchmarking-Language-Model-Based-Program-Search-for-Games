@@ -1,0 +1,25 @@
+Your task is to create a python function with one parameter, state represented as a numpy array, that returns a single action represented as a string.
+This python function plays a Baba is You level where the state is represented by a 2D-array with textual descriptions for each cell.
+In each level, the player is presented with a one-screen puzzle consisting of various objects and movable word tiles.
+The level is surrounded by "border_cells" which are impassable for every object and word.
+
+Word tiles such as "baba_word" and "flag word" correspond to specific objects such as "baba_obj" and "flag_obj" in the level.
+The word tile "is_word" can be used to create rules of the form <x>-is-<y>.
+Moving around the level, word tiles can be pushed to form new rules either horizontally or vertically.
+The following rules can be formed:
+- <x>-is-you = objects of type <x> are controlled by the player
+- <x>-is-win = a player touching objects of type <x> wins the game 
+- <x>-is-kill = player objects touching objects of type <x> will be killed
+- <x>-is-push = objects of type <x> can be pushed
+- <x>-is-stop = objects of type <x> are impassable
+- <x>-is-<y> = all objects of type <x> will be transformed to objects of type <y>
+
+This program will be evaluated according to its ability to solve the level within a minimal amount of time steps. 
+The program will be aborted after 100 steps.
+Your reward will be 100 minus the amount of steps required to solve the level.
+With every message you receive you either get to know about the error message produced from your code or the rating that it produced.
+Please provide me your first function. Code is to be reported by surrounding it with ```python(.*?)``` and let the function be called {self.function_name}.
+
+The state is represented as a 2D-array with strings: \n{state}\n
+Current objects in the state are: {[i for i in np.unique(state)]}\n
+The available actions are: {list(self.evaluator.action_mapping.keys())}

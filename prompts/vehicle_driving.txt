@@ -1,0 +1,203 @@
+Write a Python function to generate  {self.function_name}
+
+The function signature should be:
+
+def {self.function_name}(
+    vehicle: Vehicle,
+    target: Vec2d,
+    ) -> int:
+    pass
+
+
+At the start of you generated code include the following imports:
+
+from vehicles.asteroids_ship import AsteroidsShip
+from vehicles.core_vehicles import Vehicle
+from vehicles.vec2d import Vec2d
+
+The function should implement a policy that should drive the vehicle to the target.  
+Hence, given the current vehicle state and target, each time output the action
+as an int that will be used to update the vehicle state by the model.
+
+Be careful to write code that executes without raising exceptions or errors - for
+example be sure to avoid divide by zero errors etc.
+
+You will be asked iteratively to write policies.
+
+Take account of the feedbacK.  For example:
+
+'Iteration 6:  EvalResult(score=0.0, logs="'AsteroidsShip' object has no attribute 'position'", exec_time=0.0, succeeded=False)'
+
+This feedback indicates that the AsteroidsShip object has no attribute 'position'.  You should correct this in your code by calling the .s() function 
+     
+
+Vec2d has x and y fields and normal arithmetic operations can be performed on it, but it is immutable.
+Vehicle is an abstract class:
+        
+class Vehicle(ABC):
+
+    @abstractmethod
+    def update(self, action: int, dt: float) -> Vehicle:
+        # update the vehicle state based on the action and time step
+        pass
+
+    @abstractmethod
+    def s(self) -> Vec2d:
+        # the vehicle position in metres from the origin
+        pass
+
+    @abstractmethod
+    def heading(self) -> float:
+        # the heading in radians
+        pass
+
+    @abstractmethod
+    def speed(self) -> float:
+        # the speed of the vehicle in metres per second
+        pass
+
+    @abstractmethod
+    def n_actions(self) -> int:
+        pass
+
+
+and there will be a problem specific class such as:
+
+from dataclasses import dataclass
+import random
+
+from pydantic import BaseModel
+
+import math
+    
+class AsteroidsShip(Vehicle):
+    pass
+       
+    from __future__ import annotations
+
+
+@dataclass(frozen=True)
+class Vec2d:
+    x: float
+    y: float
+
+    # def __init__(self, x, y):
+    #     self.x = x
+    #     self.y = y
+
+    # Addition
+    def __add__(self, other: Vec2d) -> Vec2d:
+        return Vec2d(self.x + other.x, self.y + other.y)
+
+    # Subtraction
+    def __sub__(self, other: Vec2d) -> Vec2d:
+        return Vec2d(self.x - other.x, self.y - other.y)
+
+    # Multiplication
+    def __mul__(self, scale: float) -> Vec2d:
+        return Vec2d(self.x * scale, self.y * scale)
+
+    # Equality
+    def __eq__(self, other: Vec2d) -> bool:
+        return self.x == other.x and self.y == other.y
+
+
+    # Length
+    def length(self) -> float:
+        return math.sqrt(self.x * self.x + self.y * self.y)
+
+    def length_squared(self) -> float:
+        return self.x * self.x + self.y * self.y
+
+    # Normalized
+    def normalized(self) -> Vec2d:
+        if self.length() == 0:
+            return Vec2d(0, 0)
+        return Vec2d(self.x / self.length(), self.y / self.length())
+
+    # Dot product
+    def dot(self, other: Vec2d) -> float:
+        return self.x * other.x + self.y * other.y
+
+    # Angle between two vectors
+    def angle(self, other: Vec2d) -> float:
+        # return math.atan2( (self.y - other.y), self.x - other.x)
+        # return math.acos(self.dot(other) / (self.length() * other.length()))
+        return other.heading() - self.heading()
+
+    # heading of a vector
+    def heading(self) -> float:
+        if self.x == 0:
+            return math.pi / 2 if self.y > 0 else -math.pi / 2
+        return math.atan2(self.y, self.x)
+
+    def compass_heading(self) -> float:
+        angle = math.atan2(self.y, self.x)  # angle from East
+        compass_angle = math.pi / 2 - angle  # rotate to align North as 0
+
+        # Normalize the angle to be within 0 to 2*pi range
+        compass_angle = compass_angle % (2 * math.pi)
+
+        return compass_angle
+
+    # Rotate vector
+    def rotate(self, angle: float) -> Vec2d:
+        return Vec2d(self.x * math.cos(angle) - self.y * math.sin(angle),
+                     self.x * math.sin(angle) + self.y * math.cos(angle))
+
+    # Rotate vector around a point
+    def rotate_around(self, angle: float, point: Vec2d) -> Vec2d:
+        return (self - point).rotate(angle) + point
+
+    # Distance between two vectors
+    def distance(self, other: Vec2d) -> float:
+        return math.sqrt((self.x - other.x) ** 2 + (self.y - other.y) ** 2)
+
+    # Distance between two vectors squared
+    def distance_squared(self, other: Vec2d) -> float:
+        return (self.x - other.x) ** 2 + (self.y - other.y) ** 2
+
+    # Lerp between two vectors
+    def lerp(self, other: Vec2d, alpha: float) -> Vec2d:
+        return self + (other - self) * alpha
+
+    def wrap(self, screen_size: Vec2d) -> Vec2d:
+        return Vec2d(self.x % screen_size.x, self.y % screen_size.y)
+
+    def angle_between(self, other: Vec2d) -> float:
+        return math.acos(self.dot(other) / (self.length() * other.length()))
+
+    @classmethod
+    def vec_from_radians(cls, radians: float) -> Vec2d:
+        return Vec2d(math.cos(radians), math.sin(radians))
+
+    @classmethod
+    def vec_from_compass_degrees(cls, heading: float) -> Vec2d:
+        return Vec2d(
+            math.sin(math.radians(heading)),
+            math.cos(math.radians(heading))
+        )
+
+    @classmethod
+    def vec_from_compass_rad(cls, compass_rad: float) -> Vec2d:
+        polar_rads = (math.pi / 2 - compass_rad) % (2 * math.pi)
+        return Vec2d.vec_from_radians(polar_rads)
+
+    @classmethod
+    def random(cls, scale: float = 1.0) -> Vec2d:
+        return Vec2d(random.gauss(0, scale), random.gauss(0, scale))
+       
+       
+Only use the methods defined in Vehicle class
+Repeat, use only the methods defined in Vehicle class and Vec2d class.
+
+DO NOT include example usage of how to run the code in your generated code.
+
+Hint: this can be solved using search-based algorithms
+
+Hint: try Rolling Horizon Evolutionary Algorithms (RHEA), or MCTS, Or One Step Lookahead (OSLA) algorithm
+
+Hint: consider good heuristics that value being close to the target and facing the target direction.
+
+Hint: consider using macro-actions.  
+In the simplest case this could mean repeating the same action for a number of steps.

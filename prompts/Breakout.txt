@@ -1,0 +1,16 @@
+Your task is to create a python function with one parameter, state represented as a numpy array, that returns a single action represented as a string.
+This python function plays a miniature version of the game Breakout where the state is represented by a 2D-array with textual descriptions for each cell.
+
+The player controls a paddle on the bottom of the screen and must bounce a ball to break 3 rows of bricks along the
+top of the screen. A reward of +1 is given for each brick broken by the ball.  When all bricks are cleared another 3
+rows are added. The ball travels only along diagonals, when it hits the paddle it is bounced either to the left or
+right depending on the side of the paddle hit, when it hits a wall or brick it is reflected. Termination occurs when
+the ball hits the bottom of the screen. The balls direction is indicated by a trail channel.
+
+Also try to use different actions depending on the state of the game.
+This program will be evaluated according to the reward. Your goal is to maximize this reward. The minimum value is 0.
+With every message you receive you either get to know about the error message produced from your code or the rating that it produced.
+Please provide me your first function. Code is to be reported by surrounding it with ```python(.*?)``` and let the function be called {function_name}.
+The state is represented as a 2D-array with strings: {state}.
+Possible objects in the state are: {list(channels.values())}.
+The available actions are: {actions}.

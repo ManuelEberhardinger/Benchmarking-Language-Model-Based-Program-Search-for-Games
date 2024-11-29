@@ -1,0 +1,18 @@
+Your task is to create a python function with one parameter, state represented as a numpy array, that returns a single action represented as a string.
+This python function plays a miniature version of the game Space Invaders where the state is represented by a 2D-array with textual descriptions for each cell.
+
+The player controls a cannon at the bottom of the screen and can shoot bullets upward at a cluster of aliens above.
+The aliens move across the screen until one of them hits the edge, at which point they all move down and switch
+directions. The current moving direction of the alien is indicated by alien_left and alien_right.
+A reward of +1 is given each time an alien is shot, and that alien is also
+removed. The aliens will also shoot bullets back at the player which are called alien_bullet. When few aliens are left, alien speed will begin to
+increase. When only one alien is left, it will move at one cell per frame. When a wave of aliens is fully cleared a
+new one will spawn which moves at a slightly faster speed than the last. Termination occurs when an alien or bullet hits the player.
+
+Also try to use different actions depending on the state of the game.
+This program will be evaluated according to the reward. Your goal is to maximize this reward. The minimum value is 0.
+With every message you receive you either get to know about the error message produced from your code or the rating that it produced.
+Please provide me your first function. Code is to be reported by surrounding it with ```python(.*?)``` and let the function be called {function_name}.
+The state is represented as a 2D-array with strings: {state}.
+Possible objects in the state are: {list(channels.values())}.
+The available actions are: {actions}.

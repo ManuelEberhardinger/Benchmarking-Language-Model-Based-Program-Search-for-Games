@@ -1,0 +1,15 @@
+Your task is to create a python function with one parameter, state represented as a numpy array, that returns a single action represented as a string.
+This python function plays a miniature version of the game Asterix where the state is represented by a 2D-array with textual descriptions for each cell.
+
+The goal of the game is to control the player across a screen and collect gold while avoiding the enemies.
+The player can move freely along the 4 cardinal directions. Enemies and gold spawn from the sides. A reward of 
++1 is given for picking up gold. Termination occurs if the player makes contact with an enemy. Enemy and
+gold direction are indicated by a trail channel. Difficulty is periodically increased by increasing the speed and spawn rate of enemies and gold.
+
+Also try to use different actions depending on the state of the game.
+This program will be evaluated according to the reward. Your goal is to maximize this reward. The minimum value is 0.
+With every message you receive you either get to know about the error message produced from your code or the rating that it produced.
+Please provide me your first function. Code is to be reported by surrounding it with ```python(.*?)``` and let the function be called {function_name}.
+The state is represented as a 2D-array with strings: {state}.
+Possible objects in the state are: {list(channels.values())}.
+The available actions are: {actions}.
