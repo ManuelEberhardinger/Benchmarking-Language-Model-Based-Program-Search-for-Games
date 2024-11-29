@@ -1,0 +1,82 @@
+You are playing the board game SushiGo. Your job is to write the evaluation logic to help an AI play this game. Don't leave parts unfinished or TODOs. Do not include any package name.
+Write it all in a Java class called SushiGoEvaluator000, with only a single function with this signature:
+	public double evaluateState(core.AbstractGameState gameState, int playerId)
+The variable gameState is the current state of the game, and playerId is the ID of the player we evaluate the state for. The return value is an estimate of the value of the state. This must be between 0.0 and 1.0. 0.0 means we have no chance of winning, 0.50 means we have a 50% chance of winning, and 1.0 means we have won the game.
+You do not need to check for the end of the game, as the game engine will do that and only call evaluateState() if the game is still in progress.
+The first thing you'll do is cast the abstract game state variable to the specific one we need: SGGameState.
+ Write the contents of this function, so that we give a higher numeric evaluation to those game states that are beneficial to playerId. Ths first player has a playerId of 0, the second player has a playerId of 1, and so on. There are a total of 4 players in the game.
+This is the description of the board game SushiGo: 
+**Game Summary for Developer Implementation**
+
+**Game Rules:**
+- Players draft cards simultaneously, keeping one and passing the rest to the left. This happens over three rounds.
+- Special cards include:
+  - **Wasabi**: Boosts nigiri scores.
+  - **Chopsticks**: Allows taking two sushi cards on future turns.
+- Pudding cards determine the game's end:
+  - Most pudding cards: +6 points.
+  - Least pudding cards: -6 points.
+  - Ties for least are broken by most pudding cards.
+- Scoring is based on sets of:
+  - **Tempura**: 2 cards for 5 points.
+  - **Sashimi**: 3 cards for 10 points.
+  - **Dumplings**: More is better, up to 15 points for 5+ dumplings.
+  - **Nigiri**: 1-3 points, increased by wasabi.
+  - **Maki Rolls**: 6 points.
+  - **Pudding**: +6 for most, -6 for least.
+  - **Chopsticks**: No points.
+- Two-player variant includes a third dummy player.
+
+**Strategy:**
+- Focus on collecting high-value sets:
+  - **Sashimi**: Aim for sets of 3 for 10 points.
+  - **Tempura**: Aim for sets of 2 for 5 points.
+  - **Maki Rolls**: 6 points each.
+- Use special cards strategically:
+  - **Wasabi**: Boost nigiri scores.
+  - **Chopsticks**: Maximize card collection on future turns.
+- Manage pudding cards:
+  - Avoid having the least to prevent point deduction.
+  - Aim for having the most to gain points, but not at the expense of other high-scoring sets.
+- In two-player games, consider the dummy player's impact on pudding card distribution.
+
+**End of Game:**
+- The game ends after the final card is passed.
+- The player with the highest score wins. In case of a tie, the player with the most pudding cards wins.
+
+
+As well as standard java libraries you must use the following API to complete the task:
+
+Class API for games.sushigo.SGGameState extends core.AbstractGameState
+	public Counter[] getPlayerScore()
+	public java.util.Map<games.sushigo.cards.SGCard$SGCardType, core.components.Counter>[] getPlayedCardTypesAllGame()
+	public java.util.Map<games.sushigo.cards.SGCard$SGCardType, core.components.Counter>[] getPointsPerCardType()
+	public double getGameScore(int playerId)
+	public double getTiebreak(int playerId, int tier)
+	public List<List<ChooseCard>> getCardChoices()
+	public List<Deck<SGCard>> getPlayerHands(): Returns a List of player hands. This is ordered by player ID.
+	public java.util.Map<games.sushigo.cards.SGCard$SGCardType, core.components.Counter>[] getPlayedCardTypes()
+	public Counter getPlayedCardTypes(SGCardType cardType, int player)
+	public boolean isHandKnown(int playerId, int opponentId): we know the contents of the hands of the players that are deckRotations spaces to the left of the current player
+if this returns true, then the information provided by the playerHands is reliably correct (if false, then this information is shuffled)
+	public List<Deck<SGCard>> getPlayedCards(): The Deck of all played cards
+
+Class API for games.sushigo.cards.SGCard$SGCardType extends java.lang.Enum
+Enum Values: Maki, Tempura, Sashimi, Dumpling, SquidNigiri, SalmonNigiri, EggNigiri, Wasabi, Chopsticks, Pudding
+	public boolean isDiscardedBetweenRounds()
+	public int[] getIconCountVariation()
+
+Class API for core.components.Deck<Deck> extends core.components.Component
+Javadoc: Class for a deck of components.
+A deck is defined as a "group of components". Examples of decks are:
+* A hand of components
+* A deck to draw from
+* Components played on the player's area
+* Discard pile
+	public List<T> getComponents(): 
+	public VisibilityMode getVisibilityMode()
+	public int getCapacity(): Maximum number of components this deck may contain.
+	public boolean isOverCapacity(): Checks if this game is over capacity.
+
+Do not use any methods on the classes in the API unless they are explicitly defined above.
+Do not include a main function in the class you write. Add all the import statements required.
